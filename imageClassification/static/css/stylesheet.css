@@ -1,0 +1,54 @@
+#container{
+    position: grid;
+    margin: 10% auto;
+    width: 50%;
+    float:center; 
+    border: 3px solid black;
+}
+#title{
+    grid-row: 1;
+}
+h2{
+    text-align: center;
+}
+.button-wrapper {
+    padding: 30px; 
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .button-wrapper span.label {
+    position: relative;
+    background: #6c6e69;
+    cursor: pointer;
+    color: #fff;
+    padding:15px 50px;  
+    text-transform:uppercase;
+    font-size:12px;
+  }
+  
+  #upload {
+      display: inline-block;
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 50px;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+  }
+#imagePrev{
+    display:static;
+    text-align: center;
+    padding:100px;  
+    margin:15px;
+    background-color: gray;
+}
+#Button{
+    text-align: center;
+    padding: 10px;
+}
+#submit{
+    padding: 10px 50px;
+}
