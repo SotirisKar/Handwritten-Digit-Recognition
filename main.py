@@ -1,36 +1,53 @@
+from PIL import ImageTk #sudo apt-get install python-imaging-tk
 import matplotlib.pyplot as plt
+from tkinter import filedialog
 import tensorflow as tf
+from tkinter import *
+import tkinter as tk
 import numpy as np
+import PIL.Image
 import cv2 as cv
-
-mnist = tf.keras.datasets.mnist
-(x_train, y_train), (x_test,y_test) = mnist.load_data()
+import os
 
 
-x_train = tf.keras.utils.normalize(x_train, axis=1)
-x_test = tf.keras.utils.normalize(x_test, axis=1)
+def showimage():
+    fln = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select Image File", filetypes=(("png file","*.png"),("jpg file","*.jpg")))
+    img = PIL.Image.open(fln)
+    copy = img.resize((350,350))
+    copy.thumbnail((350, 350))
+    copy = ImageTk.PhotoImage(copy)
+    lbl.configure(image=copy)
+    lbl.image = copy
 
-model = tf.keras.models.Sequential()
-model.add(tf.keras.layers.Flatten(input_shape=(28,28))) #flatten the input
-model.add(tf.keras.layers.Dense(units = 128, activation=tf.nn.relu)) #all the neurons connected to the previous and next layer
-model.add(tf.keras.layers.Dense(units = 128, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(units = 10, activation=tf.nn.softmax)) #activation output
-
-model.compile(optimizer='adam', loss= 'sparse_categorical_crossentropy', metrics=['accuracy'])
-
-
-model.fit(x_train, y_train, epochs=3)
-loss, accuracy = model.evaluate(x_test, y_test)
-print(accuracy)
-print(loss)
+    import model
 
 
-model.save('digits.model')
+    img = np.invert(img)
+    prediction = model.predict(tf.argmax(prediction))
+    print ("Prediction for test image:", np.squeeze(prediction))
 
-for x in range(1,4):
-    img = cv.imread(f'{x}.png')[:,:,0]
-    img = np.invert(np.array([img]))
-    prediction = model.predict(img)
-    print(f'Results: {np.argmax(prediction)}')
-    plt.imshow(img[0], cmap = plt.cm.binary)
-    plt.show()
+    '''
+    if img.endswith('.png','.jpg'):
+        img = np.invert(img)
+        prediction = model.predict(img)
+        print(np.argmax(prediction))
+
+        notification = Label(root, img[0])
+        notification.pack() 
+'''
+
+
+root = Tk()
+
+frm = Frame(root)
+frm.pack(side= BOTTOM, padx=15, pady=15)
+lbl = Label(root)
+lbl.pack()
+btn = Button(frm, text="Image", command = showimage)
+btn.pack(side=tk.LEFT, padx=10)
+btn2= Button(frm, text="Exit", command=lambda: exit())
+btn2.pack(side=tk.LEFT, padx=10)
+
+root.title("Digit Reccognition")
+root.geometry("300x350")
+root.mainloop()
